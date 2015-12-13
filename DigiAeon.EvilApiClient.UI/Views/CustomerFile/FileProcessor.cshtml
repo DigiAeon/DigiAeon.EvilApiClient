@@ -14,14 +14,20 @@
         var hub = $.connection.serviceHub;
 
         // Broadcasting receiver
-        hub.client.broadcastUploadCustomerResult = function (response) {
+        hub.client.broadcastUploadCustomerResult = function (fileName, response) {
+            // TODO: HtmlEncode for response values required
+            if (fileName.toLowerCase() != "@Request["fileName"]".toLowerCase()) {
+                return;
+            }
+
             var customer = response.customer ? response.customer : "";
             var value = response.value ? response.value : "";
             var added = response.added ? response.added : false;
             var hash = response.hash ? response.hash : "";
             var errors = response.errors ? response.errors : [];
 
-            var $div = $("<div/>").html("<b>Customer:</b> " + customer + " , <b>Value:</b> " + value);
+            var $div = $("<div/>"); /*.html("<b>File: </b>" + fileName);*/
+            $div.append(("<b>Customer:</b> " + customer + " , <b>Value:</b> " + value));
             if ($.trim(hash).length > 0) {
                 $div.append(" (<b>Hash:</b> " + hash + ")");
             }

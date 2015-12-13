@@ -96,7 +96,7 @@ namespace DigiAeon.EvilApiClient.Services
                             };
 
                             // Broadcast result for any parsing error
-                            BroadcastUploadCustomerResult(response, broadcastForIdentityUserName);
+                            BroadcastUploadCustomerResult(fileName, response, broadcastForIdentityUserName);
                         }
                     }
                 }
@@ -129,7 +129,7 @@ namespace DigiAeon.EvilApiClient.Services
                     }
 
                     // Step 4: Broadcast the response to client
-                    BroadcastUploadCustomerResult(uploadResponse, broadcastForIdentityUserName);
+                    BroadcastUploadCustomerResult(fileName, uploadResponse, broadcastForIdentityUserName);
 
                     return null;
                 }
@@ -145,17 +145,17 @@ namespace DigiAeon.EvilApiClient.Services
                     };
 
                     // Broadcast result for error
-                    BroadcastUploadCustomerResult(response, broadcastForIdentityUserName);
+                    BroadcastUploadCustomerResult(fileName, response, broadcastForIdentityUserName);
 
                     return null;
                 }
             });
         }
 
-        private void BroadcastUploadCustomerResult(UploadCustomerResponse response, string broadcastForIdentityUserName)
+        private void BroadcastUploadCustomerResult(string fileName, UploadCustomerResponse response, string broadcastForIdentityUserName)
         {
             var hubContenxt = GlobalHost.ConnectionManager.GetHubContext<ServiceHub>();
-            hubContenxt.Clients.User(broadcastForIdentityUserName).broadcastUploadCustomerResult(response);
+            hubContenxt.Clients.User(broadcastForIdentityUserName).broadcastUploadCustomerResult(fileName, response);
         }
 
         /*
