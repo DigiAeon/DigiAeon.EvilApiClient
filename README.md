@@ -18,6 +18,7 @@
 - Unit tests are not created.
 - Honestly, some of the methods need minor refectoring to make it testable. 
 - No exception handling module is integrated.
+- No custom error page.
 
 # If not satisfied with the Solution
    - Call me!
