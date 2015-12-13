@@ -20,7 +20,7 @@
 - No exception handling module is integrated.
 - No custom error page.
 
-# If not satisfied with the Solution
+# If not satisfied
    - Call me!
 
 # If satisfied
