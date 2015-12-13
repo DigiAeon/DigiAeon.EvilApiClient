@@ -121,12 +121,11 @@ namespace DigiAeon.EvilApiClient.Services
                     // Step 2: Looks like we got the hash, now varify if customer is actually created!
                     var getResponse = await _evilApiService.GetCustomer(uploadResponse.Hash).ConfigureAwait(false);
 
-                    // Step 3: Well well well, hash not found, reset the response
+                    // Step 3: Well well well, hash not found, reset the response result (don't reset hash so that it can be used for inquiry)
                     if (string.IsNullOrWhiteSpace(getResponse.Hash))
                     {
                         uploadResponse.Added = false;
                         uploadResponse.Errors = getResponse.Errors;
-                        uploadResponse.Hash = getResponse.Hash;
                     }
 
                     // Step 4: Broadcast the response to client
