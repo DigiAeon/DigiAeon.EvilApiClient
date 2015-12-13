@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using DigiAeon.Core;
-using DigiAeon.EvilApiClient.Services.Interfaces;
 using DigiAeon.EvilApiClient.Services.Interfaces.EvilApi;
 using Newtonsoft.Json;
 

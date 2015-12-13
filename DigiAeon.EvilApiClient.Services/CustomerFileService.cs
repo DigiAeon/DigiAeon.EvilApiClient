@@ -62,42 +62,36 @@ namespace DigiAeon.EvilApiClient.Services
             return new UploadResponse(uploadedFileName, errorCode);
         }
 
-        public void UploadCustomersAndBroadcastResult(string userName, string fileName, string broadcastForIdentityUserName)
+        public void UploadCustomersAndBroadcastResult(string userName, TextReader fileTextReader, string fileName, string broadcastForIdentityUserName)
         {
-            // TODO: Need to move OpenText code outside class and need to inject dependency for Unit Test.
-            var filePath = Path.Combine(_settings.FolderPath, fileName);
-
-            using (var reader = File.OpenText(filePath))
+            using (var csvReader = new CsvReader(fileTextReader, new CsvConfiguration { HasHeaderRecord = false }))
             {
-                using (var csvReader = new CsvReader(reader, new CsvConfiguration { HasHeaderRecord = false }))
+                while (csvReader.Read())
                 {
-                    while (csvReader.Read())
+                    // Try to get customer
+                    var customer = string.Empty;
+                    var couldRetrieveCustomer = csvReader.CurrentRecord.Length >= 1 && csvReader.TryGetField(0, out customer);
+
+                    // Try to get value
+                    var value = 0;
+                    var couldRetrieveValue = csvReader.CurrentRecord.Length >= 2 && csvReader.TryGetField(1, out value);
+
+                    if (couldRetrieveCustomer && couldRetrieveValue)
                     {
-                        // Try to get customer
-                        var customer = string.Empty;
-                        var couldRetrieveCustomer = csvReader.CurrentRecord.Length >= 1 && csvReader.TryGetField(0, out customer);
-
-                        // Try to get value
-                        var value = 0;
-                        var couldRetrieveValue = csvReader.CurrentRecord.Length >= 2 && csvReader.TryGetField(1, out value);
-
-                        if (couldRetrieveCustomer && couldRetrieveValue)
+                        // Upload customer and broadcast result
+                        UploadCustomerAndBroadcast(userName, customer, value, fileName, broadcastForIdentityUserName);
+                    }
+                    else
+                    {
+                        var response = new UploadCustomerResponse
                         {
-                            // Upload customer and broadcast result
-                            UploadCustomerAndBroadcast(userName, customer, value, fileName, broadcastForIdentityUserName);
-                        }
-                        else
-                        {
-                            var response = new UploadCustomerResponse
-                            {
-                                Customer = customer,
-                                Value = value,
-                                Errors = new[] {"Couldn't parse the record"}
-                            };
+                            Customer = customer,
+                            Value = value,
+                            Errors = new[] { "Couldn't parse the record" }
+                        };
 
-                            // Broadcast result for any parsing error
-                            BroadcastUploadCustomerResult(fileName, response, broadcastForIdentityUserName);
-                        }
+                        // Broadcast result for any parsing error
+                        BroadcastUploadCustomerResult(fileName, response, broadcastForIdentityUserName);
                     }
                 }
             }
@@ -157,49 +151,5 @@ namespace DigiAeon.EvilApiClient.Services
             var hubContenxt = GlobalHost.ConnectionManager.GetHubContext<ServiceHub>();
             hubContenxt.Clients.User(broadcastForIdentityUserName).broadcastUploadCustomerResult(fileName, response);
         }
-
-        /*
-        public async Task<List<UploadCustomerResponse>> UploadCustomers(string userName, string fileName)
-        {
-            var filePath = Path.Combine(_settings.FolderPath, fileName);
-            var pendingTasks = new List<Task<UploadCustomerResponse>>();
-            var completeTasks = new List<UploadCustomerResponse>();
-
-            using (var reader = File.OpenText(filePath))
-            {
-                using (var csvReader = new CsvReader(reader))
-                {
-                    while (csvReader.Read())
-                    {
-                        var customer = string.Empty;
-                        var couldRetrieveCustomer = csvReader.CurrentRecord.Length >= 1 && csvReader.TryGetField(0, out customer);
-
-                        var value = 0;
-                        var couldRetrieveValue = csvReader.CurrentRecord.Length >= 2 && csvReader.TryGetField(1, out value);
-
-                        if (couldRetrieveCustomer && couldRetrieveValue)
-                        {
-                            pendingTasks.Add(_evilApiService.UploadCustomer(userName, customer, value, fileName));
-                        }
-                        else
-                        {
-                            var response = new UploadCustomerResponse
-                            {
-                                Customer = customer,
-                                Value = value,
-                                Errors = new[] { "Couldn't parse the record" }
-                            };
-
-                            completeTasks.Add(response);
-                        }
-                    }
-
-                    completeTasks.AddRange(await Task.WhenAll(pendingTasks).ConfigureAwait(false));
-
-                    return completeTasks;
-                }
-            }
-        }
-        */
     }
 }

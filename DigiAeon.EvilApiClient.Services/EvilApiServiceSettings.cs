@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DigiAeon.EvilApiClient.Services.Interfaces
+﻿namespace DigiAeon.EvilApiClient.Services
 {
     public class EvilApiServiceSettings
     {

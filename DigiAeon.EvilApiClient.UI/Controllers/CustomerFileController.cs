@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
@@ -64,7 +65,10 @@ namespace DigiAeon.EvilApiClient.UI.Controllers
 
             if (!fileUploaded.Contains(fileName))
             {
-                CustomerFileService.UploadCustomersAndBroadcastResult(Config.Username, fileName, HttpContext.GetOwinContext().Authentication.User.Identity.Name);
+                using (var reader = System.IO.File.OpenText(Path.Combine(Config.CustomerFileFolderMapPath, fileName)))
+                {
+                    CustomerFileService.UploadCustomersAndBroadcastResult(Config.Username, reader, fileName, HttpContext.GetOwinContext().Authentication.User.Identity.Name);
+                }
 
                 fileUploaded.Add(fileName);
 

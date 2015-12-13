@@ -6,6 +6,8 @@ namespace DigiAeon.EvilApiClient.Services.Hubs
     {
         public void EstablishConnection()
         {
+            // Reason: It's experienced that calling websocket method establish a connection.
+            // TODO: Find a better way for establishing a connection or why broadcast receiving method not working
         }
     }
 }
