@@ -16,7 +16,6 @@
 # Limitation of solution (as it's just a demo solution)
 - Won't find much comments in code.
 - Unit tests are not created.
-- Honestly, some of the methods need minor refectoring to make it testable. 
 - No exception handling module is integrated.
 - No custom error page.
 
