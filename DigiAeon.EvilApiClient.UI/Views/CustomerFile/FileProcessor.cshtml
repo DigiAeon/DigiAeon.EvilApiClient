@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Customer File Processor";
+}
+
+<h2>Processing Customer File (Logged In UserId: @HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name)</h2>
+<div id="message" class="alert alert-info">Process is not started yet...</div>
+<br/>
+<div id="customerProcessed"></div>
+<br/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        // service hub
+        var hub = $.connection.serviceHub;
+
+        // Broadcasting receiver
+        hub.client.broadcastUploadCustomerResult = function (response) {
+            var customer = response.customer ? response.customer : "";
+            var value = response.value ? response.value : "";
+            var added = response.added ? response.added : false;
+            var hash = response.hash ? response.hash : "";
+            var errors = response.errors ? response.errors : [];
+
+            var $div = $("<div/>").html("<b>Customer:</b> " + customer + " , <b>Value:</b> " + value);
+            if ($.trim(hash).length > 0) {
+                $div.append(" (<b>Hash:</b> " + hash + ")");
+            }
+            if (errors.length > 0) {
+                $div.append("<br /><b>Errors:</b>");
+                $div.append("<br />" + errors.join());
+            }
+
+            if (added) {
+                $div.addClass("alert alert-success");
+            } else {
+                $div.addClass("alert alert-danger");
+            }
+
+            $("#customerProcessed").prepend($div);
+        };
+
+        $.connection.hub.start().done(function () {
+
+            // Establish a connection
+            hub.server.establishConnection($.connection.hub.id, $.connection.hub.id);
+
+            // Start processing customer file
+            $.ajax({
+                url: "@Url.Action("StartProcessingFile", "CustomerFile")",
+                method: "GET",
+                data: {fileName: "@Request["fileName"]"},
+                success: function (message) {
+                    if (message == "STARTED") {
+                        $("#message").html("Process is started");
+                    } else {
+                        $("#message").html("Process is already started before, but you will still get the notification if in progress!");
+                    }
+            }
+        });
+        });
+    });
+</script>

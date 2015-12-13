@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+@using (Html.BeginForm("Index", "Login", FormMethod.Post, new { enctype = @"multipart/form-data", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="alert alert-info">
+        Reason to ask for login: Customer file processing looks like an operation preformed by authorized user only. <br/>
+    </div>
+    <br/>
+    <div clas="input-group">
+        <input type="submit" id="login" class="btn btn-primary" value="To Login Just Click Here!" />
+    </div>
+}
+

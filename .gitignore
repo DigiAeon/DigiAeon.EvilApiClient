@@ -1,0 +1,6 @@
+obj/
+bin/
+StyleCop.Cache
+*.sln.DotSettings.user
+packages/
+Files/Customer/**

@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigiAeon.Core", "..\DigiAeon.Core\DigiAeon.Core.csproj", "{EA3F4714-B9BC-49DF-A61A-C804582C704B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigiAeon.EvilApiClient.Services", "..\DigiAeon.EvilApiClient.Services\DigiAeon.EvilApiClient.Services.csproj", "{9BD08411-BE09-4A11-B2E7-64A664DEA74D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigiAeon.EvilApiClient.Services.Interfaces", "..\DigiAeon.EvilApiClient.Services.Interfaces\DigiAeon.EvilApiClient.Services.Interfaces.csproj", "{63D16648-C712-41E2-BDD7-8F877AB5BF07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigiAeon.EvilApiClient.UI.Bootstrapper", "..\DigiAeon.EvilApiClient.UI.Bootstrapper\DigiAeon.EvilApiClient.UI.Bootstrapper.csproj", "{448E45F7-5B28-4B6A-A32F-31EF59534462}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigiAeon.EvilApiClient.UI", "..\DigiAeon.EvilApiClient.UI\DigiAeon.EvilApiClient.UI.csproj", "{BA25C879-C5EB-433D-89BB-7BD00E4E0CF2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Infrastructure", "1. Infrastructure", "{FC016A49-A7A1-4901-BC98-56EE764EB014}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. DomainModel", "2. DomainModel", "{FBD88AE8-CAB5-40DD-8257-5F3FC55FBCFB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Presentation", "3. Presentation", "{ACD32493-78BD-4FD9-808E-02C54DFAE18E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA3F4714-B9BC-49DF-A61A-C804582C704B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA3F4714-B9BC-49DF-A61A-C804582C704B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA3F4714-B9BC-49DF-A61A-C804582C704B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA3F4714-B9BC-49DF-A61A-C804582C704B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BD08411-BE09-4A11-B2E7-64A664DEA74D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BD08411-BE09-4A11-B2E7-64A664DEA74D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BD08411-BE09-4A11-B2E7-64A664DEA74D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BD08411-BE09-4A11-B2E7-64A664DEA74D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63D16648-C712-41E2-BDD7-8F877AB5BF07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D16648-C712-41E2-BDD7-8F877AB5BF07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D16648-C712-41E2-BDD7-8F877AB5BF07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D16648-C712-41E2-BDD7-8F877AB5BF07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{448E45F7-5B28-4B6A-A32F-31EF59534462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{448E45F7-5B28-4B6A-A32F-31EF59534462}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{448E45F7-5B28-4B6A-A32F-31EF59534462}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{448E45F7-5B28-4B6A-A32F-31EF59534462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA25C879-C5EB-433D-89BB-7BD00E4E0CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA25C879-C5EB-433D-89BB-7BD00E4E0CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA25C879-C5EB-433D-89BB-7BD00E4E0CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA25C879-C5EB-433D-89BB-7BD00E4E0CF2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EA3F4714-B9BC-49DF-A61A-C804582C704B} = {FC016A49-A7A1-4901-BC98-56EE764EB014}
+		{9BD08411-BE09-4A11-B2E7-64A664DEA74D} = {FBD88AE8-CAB5-40DD-8257-5F3FC55FBCFB}
+		{63D16648-C712-41E2-BDD7-8F877AB5BF07} = {FBD88AE8-CAB5-40DD-8257-5F3FC55FBCFB}
+		{448E45F7-5B28-4B6A-A32F-31EF59534462} = {ACD32493-78BD-4FD9-808E-02C54DFAE18E}
+		{BA25C879-C5EB-433D-89BB-7BD00E4E0CF2} = {ACD32493-78BD-4FD9-808E-02C54DFAE18E}
+	EndGlobalSection
+EndGlobal

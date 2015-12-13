@@ -1,0 +1,42 @@
+﻿@model DigiAeon.EvilApiClient.UI.ViewModels.CustomerFile.UploadViewModel
+@{
+    ViewBag.Title = "Upload";
+}
+
+<h2>Upload Customer File (Logged In UserId: @HttpContext.Current.GetOwinContext().Authentication.User.Identity.Name)</h2>
+
+@using (Html.BeginForm("Upload", "CustomerFile", FormMethod.Post, new { enctype = @"multipart/form-data", role="form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="alert alert-danger" @Html.Raw(string.IsNullOrWhiteSpace(Model.ErrorMessage) ? "style='display:none;'" : string.Empty) id="@Html.IdFor(model => model.ErrorMessage)">@Html.Raw(Model.ErrorMessage)</div>
+    <div class="input-group">
+        <label for="@Html.IdFor(model => model.File)">Customer File (@Html.Raw(string.Join(", ", Model.AllowedFileExtensions.Select(x => "*" + x.ToLowerInvariant())))):</label>
+        <input type="file" id="@Html.IdFor(model => model.File)" name="@Html.IdFor(model => model.File)" class="form-control" />
+    </div>
+    <br />
+    <div clas="input-group">
+        <input type="submit" id="uploadFile" class="btn btn-primary" value="Submit"/>
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#uploadFile").bind("click", function(e) {
+            var file = $.trim($("#@Html.IdFor(model => model.File)").val());
+            var extensionMatch = @Html.Raw(string.Format("{0}{1}{2}", @"/\.(", @Html.Raw(string.Join(")|(", Model.AllowedFileExtensions.Select(x => x.Replace(".", "").ToLowerInvariant()))), ")$/i"));
+            var $errorMessage = $("#@Html.IdFor(model => model.ErrorMessage)");
+
+            if (file.length <= 0) {
+                $errorMessage.html("@Model.SelectFileMessage");
+                $errorMessage.show();
+                e.preventDefault();
+            } else if (!file.match(extensionMatch)) {
+                $errorMessage.html("@Model.InvalidFileTypeMessage");
+                $errorMessage.show();
+                e.preventDefault();
+            } else {
+                $errorMessage.html("");
+                $errorMessage.hide();
+            }
+        });
+    });
+</script>
