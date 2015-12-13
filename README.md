@@ -1,23 +1,23 @@
 # My Words
   - Oh boy! This was definitely interesting and that's why I am writing "My Words" :-)
   - Tried to keep it as simple as it possible.
-  - Don't ask me if it's production ready, it's not. But it's in assembly line of production.
+  - Don't ask me if it's production ready, it's not. But it's in assembly line.
 
 # What Manager wants and What I believe
-   - [Manager] => wants the WAY of processing customer file asynchronously via web interface
-   - [I] => believe this is a long running process that should be done via windows service or scheduled console service. However, I do believe user has every rights to see the update notification via web. So, what manager demanded is definitely prcatical.
+   - [Manager] => wants the WAY of processing customer file asynchronously via web interface.
+   - [I] => believe this is a long running process that should be done via windows service or scheduled task. However, I do believe user has every rights to see the notifications via web interface.
 
 # What I did
-   - To simplify the solution, I am using TPL and calling "Fire and Forget" task which eventually broadcast the result of the each customer records via SignalR (websocket)
-   - Next page ("File Processor") after upload websocket connection is established via SignalR javascript library, and then records of uploaded file will be started processing one by one.
-   - To broadcast result to the user that has started the upload, fake user identity via login page is used that uses sessionID as an user name! So, if user open browser window/tab with the same session, he should be able to get the notification.
-   - When the process starts, the reference of files being process session will be stored. So, even if the page is refreshed, process won't start again but user will still get the notification.
+   - To simplify the solution, I am using TPL and calling "Fire and Forget" tasks that eventually broadcast the result of the each customer records via SignalR (websocket)
+   - On next page after upload, websocket connection is established via SignalR javascript library, and then processing of customer reords from the uploaded file will be started.
+   - To broadcast result to the user that has started the upload, fake user identity via login page is used. FYI, SessionID is used as an user name! So, if user open browser window/tab with the same session, he should be able to get the notification.
+   - When the process starts, the reference of files being processed will be stored in session. So, even if the page is refreshed, process won't start again but user will still get the notification.
  
-# Limitation of solution (due to time constraints)
-- Comments are yet to enter for each method.
+# Limitation of solution (as it's just a demo solution)
+- Won't find much comments in code.
 - Unit tests are not created.
-- Honestly, some of the methods need minor refectoring to make it enable to unit test. 
-- Propert exception handling module isn't integrated as this being a demo.
+- Honestly, some of the methods need minor refectoring to make it testable. 
+- No exception handling module is integrated.
 
 # If not satisfied with the Solution
    - Call me!
