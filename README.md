@@ -1,5 +1,5 @@
 # My Words
-  - Oh boy! This was definitely interesting and that's why I am writing "My Words" :-)
+  - This was definitely interesting and that's why I am writing "My Words" :-)
   - Tried to keep it as simple as it possible.
   - Don't ask me if it's production ready, it's not. But it's in assembly line.
 
@@ -16,7 +16,6 @@
 # Limitation of solution (as it's just a demo solution)
 - Won't find much comments in code.
 - Unit tests are not created.
-- Honestly, some of the methods need minor refectoring to make it testable. 
 - No exception handling module is integrated.
 - No custom error page.
 
