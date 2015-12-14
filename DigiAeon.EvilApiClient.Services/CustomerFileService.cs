@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,6 +65,8 @@ namespace DigiAeon.EvilApiClient.Services
 
         public void UploadCustomersAndBroadcastResult(string userName, TextReader fileTextReader, string fileName, string broadcastForIdentityUserName)
         {
+            var broadcastTaskParameters = new List<UploadAndBroadcastTaskParameters>();
+            
             using (var csvReader = new CsvReader(fileTextReader, new CsvConfiguration { HasHeaderRecord = false }))
             {
                 while (csvReader.Read())
@@ -79,7 +82,15 @@ namespace DigiAeon.EvilApiClient.Services
                     if (couldRetrieveCustomer && couldRetrieveValue)
                     {
                         // Upload customer and broadcast result
-                        UploadCustomerAndBroadcast(userName, customer, value, fileName, broadcastForIdentityUserName);
+
+                        broadcastTaskParameters.Add(new UploadAndBroadcastTaskParameters
+                        {
+                            UserName = userName,
+                            Customer = customer,
+                            Value = value,
+                            FileName = fileName,
+                            BroadcastForIdentityUserName = broadcastForIdentityUserName
+                        });
                     }
                     else
                     {
@@ -95,61 +106,63 @@ namespace DigiAeon.EvilApiClient.Services
                     }
                 }
             }
+
+             Task.Run(() => Parallel.ForEach(broadcastTaskParameters, param => UploadCustomerAndBroadcast(param.UserName, param.Customer, param.Value, param.FileName, param.BroadcastForIdentityUserName)));
         }
 
-        private void UploadCustomerAndBroadcast(string userName, string customer, int value, string fileName, string broadcastForIdentityUserName)
+        private async void UploadCustomerAndBroadcast(string userName, string customer, int value, string fileName, string broadcastForIdentityUserName)
         {
-            Task.Factory.StartNew(async () =>
+            try
             {
-                try
+                // Step 1: Send the customer data to API for upload
+                var uploadResponse = await _evilApiService.UploadCustomer(userName, customer, value, fileName).ConfigureAwait(false);
+
+                // Step 2: If it's failed no need to run again (Or this is my assumption)
+                if (string.IsNullOrWhiteSpace(uploadResponse.Hash))
                 {
-                    // Step 1: Send the customer data to API for upload
-                    var uploadResponse = await _evilApiService.UploadCustomer(userName, customer, value, fileName).ConfigureAwait(false);
-
-                    // Step 2: If it's failed no need to run again (Or this is my assumption)
-                    if (string.IsNullOrWhiteSpace(uploadResponse.Hash))
-                    {
-                        return uploadResponse;
-                    }
-
-                    // Step 2: Looks like we got the hash, now varify if customer is actually created!
-                    var getResponse = await _evilApiService.GetCustomer(uploadResponse.Hash).ConfigureAwait(false);
-
-                    // Step 3: Well well well, hash not found, reset the response result (don't reset hash so that it can be used for inquiry)
-                    if (string.IsNullOrWhiteSpace(getResponse.Hash))
-                    {
-                        uploadResponse.Added = false;
-                        uploadResponse.Errors = getResponse.Errors;
-                    }
-
-                    // Step 4: Broadcast the response to client
                     BroadcastUploadCustomerResult(fileName, uploadResponse, broadcastForIdentityUserName);
-
-                    return null;
                 }
-                catch (AggregateException ex)
+
+                // Step 2: Looks like we got the hash, now varify if customer is actually created!
+                var getResponse = await _evilApiService.GetCustomer(uploadResponse.Hash).ConfigureAwait(false);
+
+                // Step 3: Well well well, hash not found, reset the response result (don't reset hash so that it can be used for inquiry)
+                if (string.IsNullOrWhiteSpace(getResponse.Hash))
                 {
-                    ex.Handle(e => true);
-
-                    var response = new UploadCustomerResponse
-                    {
-                        Customer = customer,
-                        Value = value,
-                        Errors = new[] { ex.Message } // Ideally, it should be some meaningful error, or it should not on the first place!!
-                    };
-
-                    // Broadcast result for error
-                    BroadcastUploadCustomerResult(fileName, response, broadcastForIdentityUserName);
-
-                    return null;
+                    uploadResponse.Added = false;
+                    uploadResponse.Errors = getResponse.Errors;
                 }
-            });
+
+                // Step 4: Broadcast the response to client
+                BroadcastUploadCustomerResult(fileName, uploadResponse, broadcastForIdentityUserName);
+            }
+            catch (Exception ex)
+            {
+                var response = new UploadCustomerResponse
+                {
+                    Customer = customer,
+                    Value = value,
+                    Errors = new[] { ex.Message } // Ideally, it should be some meaningful error, or it should not on the first place!!
+                };
+
+                // Broadcast result for error
+                BroadcastUploadCustomerResult(fileName, response, broadcastForIdentityUserName);
+            }
         }
 
         private void BroadcastUploadCustomerResult(string fileName, UploadCustomerResponse response, string broadcastForIdentityUserName)
         {
             var hubContenxt = GlobalHost.ConnectionManager.GetHubContext<ServiceHub>();
             hubContenxt.Clients.User(broadcastForIdentityUserName).broadcastUploadCustomerResult(fileName, response);
+        }
+
+        private class UploadAndBroadcastTaskParameters
+        {
+            public string UserName { get; set; }
+            public string Customer { get; set; }
+            public int Value { get; set; }
+            public string FileName { get; set; }
+            public string BroadcastForIdentityUserName { get; set; }
         }
     }
 }
