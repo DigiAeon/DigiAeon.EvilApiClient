@@ -11,3 +11,6 @@ Files/Customer/**
 *.pubxml
 *.pubxml.user
 *.publishproj
+/sln/.vs/DigiAeon.EvilApiClient
+/DigiAeon.EvilApiClient.UI/DigiAeon.EvilApiClient.UI.csproj.user
+/.vs/DigiAeon.EvilApiClient/v17
