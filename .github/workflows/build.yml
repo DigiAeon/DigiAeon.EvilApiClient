@@ -45,4 +45,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          msbuild sln\DigiAeon.EvilApiClient.sln /t:restore,build /p:RestorePackagesConfig=true,Configuration=Release
+          msbuild sln\DigiAeon.EvilApiClient.sln /t:Rebuild /p:Configuration=Release
