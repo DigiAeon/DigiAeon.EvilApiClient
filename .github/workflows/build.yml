@@ -5,8 +5,8 @@ on:
       - master
   pull_request:
     types: [opened, synchronize, reopened]
-env:
-  MSBUILD_URL: https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/5.13.1.76110/sonar-scanner-msbuild-5.13.1.76110-net46.zip
+#env:
+#  MSBUILD_URL: https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/5.13.1.76110/sonar-scanner-msbuild-5.13.1.76110-net46.zip
 jobs:
   build:
     name: Build and analyze
@@ -41,10 +41,10 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-      - name: Install Sonar Scanner
-        run: |
-          Invoke-WebRequest -Uri "${{ env.MSBUILD_URL }}" -OutFile build/msbuild.zip
-          Expand-Archive -LiteralPath build/msbuild.zip -DestinationPath msbuild
+      #- name: Install Sonar Scanner
+      #  run: |
+      #    Invoke-WebRequest -Uri "${{ env.MSBUILD_URL }}" -OutFile build/msbuild.zip
+      #    Expand-Archive -LiteralPath build/msbuild.zip -DestinationPath msbuild
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
